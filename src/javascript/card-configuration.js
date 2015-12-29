@@ -1,8 +1,8 @@
 Ext.define('Rally.technicalservices.CardConfiguration',{
     singleton: true,
 
-    fetchFields: ["FormattedID","Name","State","Owner","InvestmentCategory","Description",
-        "Notes","Milestones","TargetDate","Project"],
+    fetchFields: ["FormattedID","Name","State","Owner","Description",
+        "Notes","Milestones","TargetDate","Project",'c_MoSCoW'],
     
     
     displayFields: {
@@ -35,12 +35,15 @@ Ext.define('Rally.technicalservices.CardConfiguration',{
         },
         r2middle: {
             dataIndex: function(recordData){
-                return recordData.get('Owner') && recordData.get('Owner').DisplayName || "None";
+                console.log(recordData.get('Owner'));
+                return recordData.get('Owner') && recordData.get('Owner')._refObjectName || "None";
             },
             maxLength: 20
         },
         r2right: {
-            dataIndex: 'InvestmentCategory'
+            dataIndex: function(recordData) {
+                return recordData.get('c_MoSCoW') || "None";
+            }
         },
         r3middle: {
             dataIndex: 'Description',

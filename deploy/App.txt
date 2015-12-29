@@ -3,11 +3,11 @@
 <head>
     <title>Print Feature Cards</title>
     <!--  (c) 2015 Rally Software Development Corp.  All Rights Reserved. -->
-    <!--  Build Date: Tue Dec 29 2015 14:22:14 GMT-0800 (PST) -->
+    <!--  Build Date: Tue Dec 29 2015 14:25:59 GMT-0800 (PST) -->
     
     <script type="text/javascript">
-        var APP_BUILD_DATE = "Tue Dec 29 2015 14:22:14 GMT-0800 (PST)";
-        var CHECKSUM = 9566050928;
+        var APP_BUILD_DATE = "Tue Dec 29 2015 14:25:59 GMT-0800 (PST)";
+        var CHECKSUM = 9657538944;
     </script>
     
     <script type="text/javascript" src="/apps/2.0/sdk.js"></script>
@@ -508,8 +508,8 @@ Ext.define("print-feature-cards", {
 Ext.define('Rally.technicalservices.CardConfiguration',{
     singleton: true,
 
-    fetchFields: ["FormattedID","Name","State","Owner","InvestmentCategory","Description",
-        "Notes","Milestones","TargetDate","Project"],
+    fetchFields: ["FormattedID","Name","State","Owner","Description",
+        "Notes","Milestones","TargetDate","Project",'c_MoSCoW'],
     
     
     displayFields: {
@@ -542,12 +542,15 @@ Ext.define('Rally.technicalservices.CardConfiguration',{
         },
         r2middle: {
             dataIndex: function(recordData){
-                return recordData.get('Owner') && recordData.get('Owner').DisplayName || "None";
+                console.log(recordData.get('Owner'));
+                return recordData.get('Owner') && recordData.get('Owner')._refObjectName || "None";
             },
             maxLength: 20
         },
         r2right: {
-            dataIndex: 'InvestmentCategory'
+            dataIndex: function(recordData) {
+                return recordData.get('c_MoSCoW') || "None";
+            }
         },
         r3middle: {
             dataIndex: 'Description',
