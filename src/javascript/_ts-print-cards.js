@@ -46,19 +46,6 @@ Ext.define('Rally.technicalservices.window.PrintCards',{
 
             html += t.apply(r.getData());
 
-            //var value_html = '';
-            ////Todo organize by content or header...
-            //Ext.each(this.displayFields, function(df){
-            //    var value = r.get(df.dataIndex);
-            //    df.maxLenth = df.maxLength || 0;
-            //    if (df.maxLength > 0 && value.length > df.maxLength){
-            //        value = value.substring(0,df.maxLength);
-            //        value = value + this.truncateText;
-            //    }
-            //    value_html += Ext.String.format('<span class="{0}">{1}</span>',df.cls,value);
-            //}, this);
-            //html += Ext.String.format('<div class="artifact">{0}</div>', value_html);
-            //
             card_num ++;
             if ((card_num + 1) % 2 === 0) {
                 html += '<div class=pb></div>';

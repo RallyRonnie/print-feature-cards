@@ -11,10 +11,12 @@ Ext.define('Rally.technicalservices.CardConfiguration',{
         },
         r1right: {
             dataIndex: function(recordData){
-                if ( Ext.isEmpty(recordData.Milestones) || recordData.Milestones.Count === 0 ) {
+                console.log('rd:', recordData);
+                
+                if ( Ext.isEmpty(recordData.Milestones) || recordData.Milestones.Count === 0 || Ext.isEmpty(recordData.__Milestone) ) {
                     return "No Entry";
                 }
-                return (recordData.State && recordData.State.Name) || "No Entry";
+                return recordData.__Milestone.get('Name');
             }
         },
         r2left: {

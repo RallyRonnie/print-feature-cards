@@ -24,6 +24,10 @@ Ext.define("print-feature-cards", {
         
         var promise_functions = [this._loadFeatures];
         
+        if ( Ext.Array.contains(feature_fields, "Milestones")) {
+            promise_functions.push(this._loadMilestones);
+        }
+        
         Deft.Chain.sequence(promise_functions,this).then({
             scope: this,
             success: function(results) {
@@ -47,6 +51,7 @@ Ext.define("print-feature-cards", {
         this._loadWsapiRecords(config).then({
             scope: this,
             success: function(features) {
+                this.logger.log(Ext.String.format("Found {0} features", features.length));
                 this.features = features;
                 deferred.resolve(features);
             },
@@ -58,8 +63,67 @@ Ext.define("print-feature-cards", {
         return deferred.promise;
     },
     
+    _loadMilestones: function() {
+        var deferred = Ext.create('Deft.Deferred');
+        
+        var milestone_names = [];
+        Ext.Array.each(this.features, function(feature){
+            if ( feature.get('Milestones') && feature.get('Milestones').Count > 0 ) {
+                Ext.Array.each(feature.get('Milestones')._tagsNameArray, function(tag){
+                    milestone_names.push(tag.Name);
+                });
+            }
+        });
+        
+        this.logger.log('milestones:', milestone_names);
+        
+        var unique_names = Ext.Array.unique( Ext.Array.flatten(milestone_names) );
+        
+        var config = {
+            model: 'Milestone',
+            fetch: ['Name','TargetDate']
+        };
+        
+        if ( unique_names.length > 0 ) {
+            var filter_array = Ext.Array.map(unique_names, function(name){
+                return { property:'Name', value: name };
+            });
+            
+            config.filters = Rally.data.wsapi.Filter.or(filter_array);
+        }
+                
+        this._loadWsapiRecords(config).then({
+            scope: this,
+            success: function(milestones) {
+                var milestones_by_name = {};
+                Ext.Array.each(milestones, function(milestone){
+                    milestones_by_name[milestone.get('Name')] = milestone;
+                });
+                
+                Ext.Array.each(this.features, function(feature){
+                    feature.set('__Milestone', "");
+                    
+                    if ( feature.get('Milestones') && feature.get('Milestones').Count > 0 ) {
+                        var ms = feature.get('Milestones')._tagsNameArray[0];
+                        feature.set('__Milestone', milestones_by_name[ms.Name]);
+                    }
+                });
+                
+                deferred.resolve(milestones);
+            },
+            failure: function(msg) {
+                deferred.reject(msg);
+            }
+        });
+        
+        return deferred.promise;
+    },
+    
+    
     _loadWsapiRecords: function(config){
         var deferred = Ext.create('Deft.Deferred');
+        this.logger.log('_loadWsapiRecords', config);
+        
         var me = this;
         var default_config = {
             model: 'Defect',
@@ -79,7 +143,8 @@ Ext.define("print-feature-cards", {
     },
     
     _openPrintCards: function(records){
-
+        this.logger.log('_openPrintCards', records);
+        
         var fields =[{
             dataIndex: 'Name',
             maxLength: 100,

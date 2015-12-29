@@ -33,25 +33,9 @@ Ext.define('Rally.technicalservices.CardTemplate',{
                 '</div>',
             '</div>',
 
-            //'<tpl if="this.hasTasks(values)">',
-            //'<div class="status-value tasks" title="Manage Tasks">',
-            //'<tpl exec="this.percentage = this.getCompletedTaskPercentage(values)"></tpl>',
-            //'{[this._buildIcon(values)]}',
-            //'<tpl if="this.percentage !== 100">',
-            //'<div class="percentage">{[this.percentage]}%</div>',
-            //'</tpl>',
-            //'<tpl exec="this.toDo = this.getToDo(values)"></tpl>',
-            //'<tpl if="this.toDo &gt; 0">',
-            //'<tpl exec="this.toDoUnit = this.getToDoUnit()"></tpl>',
-            //'<div class="separator">&nbsp;</div>',
-            //'<div class="icon-to-do"></div>',
-            //'<div class="to-do-value">{[this.toDo]}{[this.toDoUnit]}</div>',
-            //'</tpl>',
-            //'</div>',
-            //'</tpl>',
             {
                 getContent: function(recordData, displayField) {
-                    console.log('getContent', recordData, displayField)
+                    //console.log('getContent', recordData, displayField)
                     var val = recordData[displayField.dataIndex] || "&nbsp;";
                     if (displayField){
                         if (Ext.isFunction(displayField.dataIndex)){
@@ -63,7 +47,7 @@ Ext.define('Rally.technicalservices.CardTemplate',{
                             val = Ext.String.ellipsis(val, displayField.maxLength);
                         }
                     }
-                    console.log('getContent', recordData, displayField, val);
+                    //console.log('getContent', recordData, displayField, val);
                     return val;
                 },
                 displayFields: config.displayFields
