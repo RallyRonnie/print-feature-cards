@@ -13,7 +13,7 @@ Ext.define('Rally.technicalservices.window.PrintCards',{
          *  maxLength (default 0)
          *  cls (defaults are: card-title, content,
          */
-        displayFields: null,
+        displayFields: null
     },
     constructor: function(config){
         this.initConfig(config);
@@ -78,9 +78,10 @@ Ext.define('Rally.technicalservices.window.PrintCards',{
         console.log(this.currentDocument, elems);
         for (var i=0; i< elems.length; i++){
             if (elems[i].title == styleSheetTitle){
+                console.log('here');
                 styleSheet = elems[i];
             }
         }
         return styleSheet.innerHTML;
-    },
+    }
 });

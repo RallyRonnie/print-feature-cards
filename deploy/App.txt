@@ -3,11 +3,11 @@
 <head>
     <title>Print Feature Cards</title>
     <!--  (c) 2015 Rally Software Development Corp.  All Rights Reserved. -->
-    <!--  Build Date: Fri Dec 04 2015 11:02:10 GMT-0600 (CST) -->
+    <!--  Build Date: Tue Dec 29 2015 07:51:37 GMT-0800 (PST) -->
     
     <script type="text/javascript">
-        var APP_BUILD_DATE = "Fri Dec 04 2015 11:02:10 GMT-0600 (CST)";
-        var CHECKSUM = 7318886630;
+        var APP_BUILD_DATE = "Tue Dec 29 2015 07:51:37 GMT-0800 (PST)";
+        var CHECKSUM = 7424724043;
     </script>
     
     <script type="text/javascript" src="/apps/2.0/sdk.js"></script>
@@ -261,7 +261,7 @@ Ext.define('Rally.technicalservices.window.PrintCards',{
     logger: new Rally.technicalservices.Logger(),
     truncateText: '...',
     config: {
-        title: 'Blah',
+        title: 'Print Feature Cards',
         records: null,
         styleSheetTitle: "printCards",
         currentDocument: null,
@@ -271,7 +271,7 @@ Ext.define('Rally.technicalservices.window.PrintCards',{
          *  maxLength (default 0)
          *  cls (defaults are: card-title, content,
          */
-        displayFields: null,
+        displayFields: null
     },
     constructor: function(config){
         this.initConfig(config);
@@ -336,11 +336,12 @@ Ext.define('Rally.technicalservices.window.PrintCards',{
         console.log(this.currentDocument, elems);
         for (var i=0; i< elems.length; i++){
             if (elems[i].title == styleSheetTitle){
+                console.log('here');
                 styleSheet = elems[i];
             }
         }
         return styleSheet.innerHTML;
-    },
+    }
 });
 Ext.define("print-feature-cards", {
     extend: 'Rally.app.App',
@@ -468,6 +469,9 @@ Ext.define('Rally.technicalservices.CardConfiguration',{
                });
         });
     </script>
+    
+    <style type="text/css">
+
 <style type="text/css" title="printCards">
 /* PLEASE LEAVE THIS STYLESHEET INLINE SINCE TITLE IS NECESSARY */
 @media print {
@@ -647,9 +651,6 @@ body {
     width: 4.3in;
 }
 </style>
-    <style type="text/css">
-
-
 .app {
 }
 .tsinfolink {

@@ -18,12 +18,8 @@
 	            }, true);
         });
     </script>
-<%
-    _.each( css_files, function(element) { 
-        print('<link rel="stylesheet" type="text/css" href="' + element + '">'); 
-     });
-    
-%>
+
+<%= style_contents %>
 
 </head>
 <body></body>
