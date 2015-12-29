@@ -3,11 +3,11 @@
 <head>
     <title>Print Feature Cards</title>
     <!--  (c) 2015 Rally Software Development Corp.  All Rights Reserved. -->
-    <!--  Build Date: Tue Dec 29 2015 07:51:37 GMT-0800 (PST) -->
+    <!--  Build Date: Tue Dec 29 2015 07:55:09 GMT-0800 (PST) -->
     
     <script type="text/javascript">
-        var APP_BUILD_DATE = "Tue Dec 29 2015 07:51:37 GMT-0800 (PST)";
-        var CHECKSUM = 7424724043;
+        var APP_BUILD_DATE = "Tue Dec 29 2015 07:55:09 GMT-0800 (PST)";
+        var CHECKSUM = 7390077949;
     </script>
     
     <script type="text/javascript" src="/apps/2.0/sdk.js"></script>
@@ -470,7 +470,6 @@ Ext.define('Rally.technicalservices.CardConfiguration',{
         });
     </script>
     
-    <style type="text/css">
 
 <style type="text/css" title="printCards">
 /* PLEASE LEAVE THIS STYLESHEET INLINE SINCE TITLE IS NECESSARY */
@@ -668,7 +667,6 @@ body {
     margin-right: 5px;
     cursor: pointer;
 }
-    </style>
 
 </head>
 <body></body>
