@@ -44,7 +44,9 @@ Ext.define('Rally.technicalservices.window.PrintCards',{
 
         Ext.each(this.records, function(r){
 
-            html += t.apply(r.getData());
+            // changing to record so that setting new fields doesn't get lost
+            //html += t.apply(r.getData());
+            html += t.apply(r);
 
             card_num ++;
             if ((card_num + 1) % 2 === 0) {

@@ -35,13 +35,13 @@ Ext.define('Rally.technicalservices.CardTemplate',{
 
             {
                 getContent: function(recordData, displayField) {
-                    //console.log('getContent', recordData, displayField)
-                    var val = recordData[displayField.dataIndex] || "&nbsp;";
+
+                    var val = recordData.get(displayField.dataIndex) || "&nbsp;";
                     if (displayField){
                         if (Ext.isFunction(displayField.dataIndex)){
                             val = displayField.dataIndex(recordData);
                         } else {
-                            val = recordData[displayField.dataIndex] || '';
+                            val = recordData.get(displayField.dataIndex) || "&nbsp;";
                         }
                         if (displayField.maxLength > 0){
                             val = Ext.String.ellipsis(val, displayField.maxLength);

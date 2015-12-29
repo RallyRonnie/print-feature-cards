@@ -2,21 +2,30 @@ Ext.define('Rally.technicalservices.CardConfiguration',{
     singleton: true,
 
     fetchFields: ["FormattedID","Name","State","Owner","InvestmentCategory","Description","Notes","Milestones","TargetDate"],
+    
+    
     displayFields: {
         r1left: {
-            dataIndex: function(recordData){
-                return recordData.FormattedID + ': ' + recordData.Name;
+            dataIndex: function(record){
+                return record.get('FormattedID') + ': ' +record.get('Name');
             },
             maxLength: 40
         },
         r1right: {
-            dataIndex: function(recordData){
-                console.log('rd:', recordData);
+            dataIndex: function(recordData){     
+                var milestones = recordData.get('Milestones');
                 
-                if ( Ext.isEmpty(recordData.Milestones) || recordData.Milestones.Count === 0 || Ext.isEmpty(recordData.__Milestone) ) {
+                if ( Ext.isEmpty(milestones) || milestones.Count === 0 || Ext.isEmpty(recordData.get('__Milestone')) ) {
                     return "No Entry";
                 }
-                return recordData.__Milestone.get('Name');
+                var target_date = recordData.get('__Milestone').get('TargetDate');
+                var quarters_by_month = [1,1,1,2,2,2,3,3,3,4,4,4];
+                
+                return Ext.String.format("{0}Q{1}.{2}",
+                    Ext.Date.format(target_date, 'Y'),
+                    quarters_by_month[parseInt( Ext.Date.format(target_date,'m') ) - 1],
+                    Ext.Date.format(target_date, 'M')
+                );
             }
         },
         r2left: {
@@ -25,7 +34,7 @@ Ext.define('Rally.technicalservices.CardConfiguration',{
         },
         r2middle: {
             dataIndex: function(recordData){
-                return recordData.Owner && recordData.Owner.DisplayName || "None";
+                return recordData.get('Owner') && recordData.get('Owner').DisplayName || "None";
             },
             maxLength: 20
         },
