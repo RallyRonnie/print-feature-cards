@@ -1,7 +1,8 @@
 Ext.define('Rally.technicalservices.CardConfiguration',{
     singleton: true,
 
-    fetchFields: ["FormattedID","Name","State","Owner","InvestmentCategory","Description","Notes","Milestones","TargetDate"],
+    fetchFields: ["FormattedID","Name","State","Owner","InvestmentCategory","Description",
+        "Notes","Milestones","TargetDate","Project"],
     
     
     displayFields: {
@@ -29,7 +30,7 @@ Ext.define('Rally.technicalservices.CardConfiguration',{
             }
         },
         r2left: {
-            dataIndex: 'Name',
+            dataIndex: function(recordData) { return recordData.get('Project').Name; },
             maxLength: 20
         },
         r2middle: {
