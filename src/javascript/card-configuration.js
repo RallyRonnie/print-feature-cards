@@ -10,7 +10,7 @@ Ext.define('Rally.technicalservices.CardConfiguration',{
             dataIndex: function(record){
                 return record.get('FormattedID') + ': ' +record.get('Name');
             },
-            maxLength: 40
+            maxLength: 30
         },
         r1right: {
             dataIndex: function(recordData){     
@@ -46,25 +46,28 @@ Ext.define('Rally.technicalservices.CardConfiguration',{
         },
         r3middle: {
             dataIndex: 'Description',
-            maxLength: 255
+            maxLength: 200
         },
         r4middle: {
             dataIndex: function(recordData) {
                 var template = "ASSETS: ({0}) {1}<br/>" +
                                "TEAMS : ({2}) {3}"
                 
-                var assets_list = [];
+                var asset_list = [];
                 var team_list = [];
                 
                 var stories = recordData.get('__Stories');
                 if ( !Ext.isEmpty(stories) && stories.length > 0 ) {
                     team_list = Ext.Array.map(stories, function(story) { return story.get("Project").Name; });
                     team_list = Ext.Array.unique(team_list);
+                    
+                    asset_list = Ext.Array.map(stories, function(story) { return story.get('c_System'); });
+                    asset_list = Ext.Array.unique(asset_list);
                 }
                 
                 return Ext.String.format(template, 
-                    assets_list.length,
-                    assets_list.join(', '),
+                    asset_list.length,
+                    asset_list.join(', '),
                     team_list.length,
                     team_list.join(', ')
                 );

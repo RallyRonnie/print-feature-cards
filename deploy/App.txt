@@ -3,11 +3,11 @@
 <head>
     <title>Print Feature Cards</title>
     <!--  (c) 2015 Rally Software Development Corp.  All Rights Reserved. -->
-    <!--  Build Date: Tue Dec 29 2015 17:00:34 GMT-0800 (PST) -->
+    <!--  Build Date: Tue Dec 29 2015 17:07:21 GMT-0800 (PST) -->
     
     <script type="text/javascript">
-        var APP_BUILD_DATE = "Tue Dec 29 2015 17:00:34 GMT-0800 (PST)";
-        var CHECKSUM = 13525458847;
+        var APP_BUILD_DATE = "Tue Dec 29 2015 17:07:21 GMT-0800 (PST)";
+        var CHECKSUM = 13618631505;
     </script>
     
     <script type="text/javascript" src="/apps/2.0/sdk.js"></script>
@@ -510,7 +510,7 @@ Ext.define("print-feature-cards", {
         var chunker = Ext.create('Rally.technicalservices.data.Chunker',{
             chunkOids: feature_oids,
             chunkField: 'Feature.ObjectID',
-            fetch: ['Name','Feature','Project','ObjectID'],
+            fetch: ['Name','Feature','Project','ObjectID','c_System'],
             model: 'HierarchicalRequirement'
         });
         chunker.load().then({
@@ -524,13 +524,10 @@ Ext.define("print-feature-cards", {
                     }
                     stories_by_feature_oid[story.get('Feature').ObjectID].push(story);
                 });
-                
-                console.log(stories_by_feature_oid);
-                
+                                
                 Ext.Array.each(this.features, function(feature){
                     var feature_oid = feature.get('ObjectID');
                     var stories = stories_by_feature_oid[feature_oid] || [];
-                    console.log(feature_oid, stories);
                     
                     feature.set('__Stories', stories);
                 });
@@ -627,7 +624,7 @@ Ext.define('Rally.technicalservices.CardConfiguration',{
             dataIndex: function(record){
                 return record.get('FormattedID') + ': ' +record.get('Name');
             },
-            maxLength: 40
+            maxLength: 30
         },
         r1right: {
             dataIndex: function(recordData){     
@@ -663,25 +660,28 @@ Ext.define('Rally.technicalservices.CardConfiguration',{
         },
         r3middle: {
             dataIndex: 'Description',
-            maxLength: 255
+            maxLength: 200
         },
         r4middle: {
             dataIndex: function(recordData) {
                 var template = "ASSETS: ({0}) {1}<br/>" +
                                "TEAMS : ({2}) {3}"
                 
-                var assets_list = [];
+                var asset_list = [];
                 var team_list = [];
                 
                 var stories = recordData.get('__Stories');
                 if ( !Ext.isEmpty(stories) && stories.length > 0 ) {
                     team_list = Ext.Array.map(stories, function(story) { return story.get("Project").Name; });
                     team_list = Ext.Array.unique(team_list);
+                    
+                    asset_list = Ext.Array.map(stories, function(story) { return story.get('c_System'); });
+                    asset_list = Ext.Array.unique(asset_list);
                 }
                 
                 return Ext.String.format(template, 
-                    assets_list.length,
-                    assets_list.join(', '),
+                    asset_list.length,
+                    asset_list.join(', '),
                     team_list.length,
                     team_list.join(', ')
                 );

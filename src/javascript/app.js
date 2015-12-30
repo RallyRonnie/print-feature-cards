@@ -127,7 +127,7 @@ Ext.define("print-feature-cards", {
         var chunker = Ext.create('Rally.technicalservices.data.Chunker',{
             chunkOids: feature_oids,
             chunkField: 'Feature.ObjectID',
-            fetch: ['Name','Feature','Project','ObjectID'],
+            fetch: ['Name','Feature','Project','ObjectID','c_System'],
             model: 'HierarchicalRequirement'
         });
         chunker.load().then({
@@ -141,13 +141,10 @@ Ext.define("print-feature-cards", {
                     }
                     stories_by_feature_oid[story.get('Feature').ObjectID].push(story);
                 });
-                
-                console.log(stories_by_feature_oid);
-                
+                                
                 Ext.Array.each(this.features, function(feature){
                     var feature_oid = feature.get('ObjectID');
                     var stories = stories_by_feature_oid[feature_oid] || [];
-                    console.log(feature_oid, stories);
                     
                     feature.set('__Stories', stories);
                 });
