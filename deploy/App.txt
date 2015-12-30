@@ -3,11 +3,11 @@
 <head>
     <title>Print Feature Cards</title>
     <!--  (c) 2015 Rally Software Development Corp.  All Rights Reserved. -->
-    <!--  Build Date: Tue Dec 29 2015 14:25:59 GMT-0800 (PST) -->
+    <!--  Build Date: Tue Dec 29 2015 17:00:34 GMT-0800 (PST) -->
     
     <script type="text/javascript">
-        var APP_BUILD_DATE = "Tue Dec 29 2015 14:25:59 GMT-0800 (PST)";
-        var CHECKSUM = 9657538944;
+        var APP_BUILD_DATE = "Tue Dec 29 2015 17:00:34 GMT-0800 (PST)";
+        var CHECKSUM = 13525458847;
     </script>
     
     <script type="text/javascript" src="/apps/2.0/sdk.js"></script>
@@ -233,6 +233,73 @@ Ext.define('Rally.technicalservices.CardTemplate',{
         ]);
     }
 });
+Ext.define('Rally.technicalservices.data.Chunker',{
+    MAX_CHUNK_SIZE: 25,
+    logger: new Rally.technicalservices.Logger(),
+    config: {
+        model: null,
+        fetch: null,
+        chunkField: null,
+        chunkOids: null
+    },
+    constructor: function(config){
+        this.initConfig(config);
+    },
+    load: function(){
+        var deferred = Ext.create('Deft.Deferred');
+        var oids = this.chunkOids;
+        var promises = [];
+
+        if (oids.length > this.MAX_CHUNK_SIZE){
+            var start_idx = 0;
+            while(start_idx < oids.length){
+                chunk_values = oids.splice(start_idx, this.MAX_CHUNK_SIZE);
+                promises.push(this._fetchRecords(chunk_values));
+            }
+        } else {
+            promises.push(this._fetchRecords(oids));
+        }
+
+        if (promises.length == 0){
+            deferred.resolve();
+        }
+        Deft.Promise.all(promises).then({
+            scope: this,
+            success: function(records) {
+                var data = _.flatten(records);
+                deferred.resolve(data);
+            },
+            failure: function(){
+                deferred.resolve([]);
+            }
+        });
+        return deferred;
+    },
+    _fetchRecords: function(object_ids){
+        var deferred = Ext.create('Deft.Deferred');
+        var filters = [];
+        Ext.each(object_ids, function(oid){
+            filters.push({property: this.chunkField, value: oid});
+        },this);
+        var wsFilters = Rally.data.wsapi.Filter.or(filters);
+
+        Ext.create('Rally.data.wsapi.Store',{
+            model: this.model,
+            fetch: this.fetch,
+            autoLoad: true,
+            context: {project: null},
+            filters: wsFilters,
+            listeners: {
+                scope: this,
+                load: function(store, records, success){
+                    this.logger.log('chunking success', success);
+                    deferred.resolve(records);
+                }
+            }
+        });
+        return deferred;
+    }
+});
 Ext.define('Rally.technicalservices.CardDisplayField',{
     dataIndex: undefined,
     maxLength: undefined,
@@ -338,13 +405,11 @@ Ext.define("print-feature-cards", {
     _gatherData: function(){
         var feature_fields = Rally.technicalservices.CardConfiguration.fetchFields;
         
-        var promise_functions = [this._loadFeatures];
-        
-        if ( Ext.Array.contains(feature_fields, "Milestones")) {
-            promise_functions.push(this._loadMilestones);
-        }
-        
-        Deft.Chain.sequence(promise_functions,this).then({
+        Deft.Chain.sequence([
+            this._loadFeatures,
+            this._loadMilestones,
+            this._loadStories
+        ],this).then({
             scope: this,
             success: function(results) {
                 this._openPrintCards(results[0]);
@@ -435,6 +500,51 @@ Ext.define("print-feature-cards", {
         return deferred.promise;
     },
     
+    _loadStories: function() {
+        var deferred = Ext.create('Deft.Deferred');
+        
+        var feature_oids = Ext.Array.map(this.features, function(feature){
+            return feature.get('ObjectID');
+        });
+        
+        var chunker = Ext.create('Rally.technicalservices.data.Chunker',{
+            chunkOids: feature_oids,
+            chunkField: 'Feature.ObjectID',
+            fetch: ['Name','Feature','Project','ObjectID'],
+            model: 'HierarchicalRequirement'
+        });
+        chunker.load().then({
+            scope: this,
+            success: function(stories){
+                this.logger.log('chunker success', stories);
+                var stories_by_feature_oid = {};
+                Ext.Array.each(stories, function(story){
+                    if (!stories_by_feature_oid[story.get('Feature').ObjectID]) {
+                        stories_by_feature_oid[story.get('Feature').ObjectID] = [];
+                    }
+                    stories_by_feature_oid[story.get('Feature').ObjectID].push(story);
+                });
+                
+                console.log(stories_by_feature_oid);
+                
+                Ext.Array.each(this.features, function(feature){
+                    var feature_oid = feature.get('ObjectID');
+                    var stories = stories_by_feature_oid[feature_oid] || [];
+                    console.log(feature_oid, stories);
+                    
+                    feature.set('__Stories', stories);
+                });
+                
+                deferred.resolve(stories);
+            },
+            failure: function(){
+                alert('failed');
+                deferred.reject('failed');
+            }
+        });
+        
+        return deferred.promise;
+    },
     
     _loadWsapiRecords: function(config){
         var deferred = Ext.create('Deft.Deferred');
@@ -542,7 +652,6 @@ Ext.define('Rally.technicalservices.CardConfiguration',{
         },
         r2middle: {
             dataIndex: function(recordData){
-                console.log(recordData.get('Owner'));
                 return recordData.get('Owner') && recordData.get('Owner')._refObjectName || "None";
             },
             maxLength: 20
@@ -557,7 +666,26 @@ Ext.define('Rally.technicalservices.CardConfiguration',{
             maxLength: 255
         },
         r4middle: {
-            dataIndex: 'Notes',
+            dataIndex: function(recordData) {
+                var template = "ASSETS: ({0}) {1}<br/>" +
+                               "TEAMS : ({2}) {3}"
+                
+                var assets_list = [];
+                var team_list = [];
+                
+                var stories = recordData.get('__Stories');
+                if ( !Ext.isEmpty(stories) && stories.length > 0 ) {
+                    team_list = Ext.Array.map(stories, function(story) { return story.get("Project").Name; });
+                    team_list = Ext.Array.unique(team_list);
+                }
+                
+                return Ext.String.format(template, 
+                    assets_list.length,
+                    assets_list.join(', '),
+                    team_list.length,
+                    team_list.join(', ')
+                );
+            },
             maxLength: 255
         }
     }

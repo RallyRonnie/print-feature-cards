@@ -35,7 +35,6 @@ Ext.define('Rally.technicalservices.CardConfiguration',{
         },
         r2middle: {
             dataIndex: function(recordData){
-                console.log(recordData.get('Owner'));
                 return recordData.get('Owner') && recordData.get('Owner')._refObjectName || "None";
             },
             maxLength: 20
@@ -50,7 +49,26 @@ Ext.define('Rally.technicalservices.CardConfiguration',{
             maxLength: 255
         },
         r4middle: {
-            dataIndex: 'Notes',
+            dataIndex: function(recordData) {
+                var template = "ASSETS: ({0}) {1}<br/>" +
+                               "TEAMS : ({2}) {3}"
+                
+                var assets_list = [];
+                var team_list = [];
+                
+                var stories = recordData.get('__Stories');
+                if ( !Ext.isEmpty(stories) && stories.length > 0 ) {
+                    team_list = Ext.Array.map(stories, function(story) { return story.get("Project").Name; });
+                    team_list = Ext.Array.unique(team_list);
+                }
+                
+                return Ext.String.format(template, 
+                    assets_list.length,
+                    assets_list.join(', '),
+                    team_list.length,
+                    team_list.join(', ')
+                );
+            },
             maxLength: 255
         }
     }

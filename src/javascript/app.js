@@ -22,13 +22,11 @@ Ext.define("print-feature-cards", {
     _gatherData: function(){
         var feature_fields = Rally.technicalservices.CardConfiguration.fetchFields;
         
-        var promise_functions = [this._loadFeatures];
-        
-        if ( Ext.Array.contains(feature_fields, "Milestones")) {
-            promise_functions.push(this._loadMilestones);
-        }
-        
-        Deft.Chain.sequence(promise_functions,this).then({
+        Deft.Chain.sequence([
+            this._loadFeatures,
+            this._loadMilestones,
+            this._loadStories
+        ],this).then({
             scope: this,
             success: function(results) {
                 this._openPrintCards(results[0]);
@@ -119,6 +117,51 @@ Ext.define("print-feature-cards", {
         return deferred.promise;
     },
     
+    _loadStories: function() {
+        var deferred = Ext.create('Deft.Deferred');
+        
+        var feature_oids = Ext.Array.map(this.features, function(feature){
+            return feature.get('ObjectID');
+        });
+        
+        var chunker = Ext.create('Rally.technicalservices.data.Chunker',{
+            chunkOids: feature_oids,
+            chunkField: 'Feature.ObjectID',
+            fetch: ['Name','Feature','Project','ObjectID'],
+            model: 'HierarchicalRequirement'
+        });
+        chunker.load().then({
+            scope: this,
+            success: function(stories){
+                this.logger.log('chunker success', stories);
+                var stories_by_feature_oid = {};
+                Ext.Array.each(stories, function(story){
+                    if (!stories_by_feature_oid[story.get('Feature').ObjectID]) {
+                        stories_by_feature_oid[story.get('Feature').ObjectID] = [];
+                    }
+                    stories_by_feature_oid[story.get('Feature').ObjectID].push(story);
+                });
+                
+                console.log(stories_by_feature_oid);
+                
+                Ext.Array.each(this.features, function(feature){
+                    var feature_oid = feature.get('ObjectID');
+                    var stories = stories_by_feature_oid[feature_oid] || [];
+                    console.log(feature_oid, stories);
+                    
+                    feature.set('__Stories', stories);
+                });
+                
+                deferred.resolve(stories);
+            },
+            failure: function(){
+                alert('failed');
+                deferred.reject('failed');
+            }
+        });
+        
+        return deferred.promise;
+    },
     
     _loadWsapiRecords: function(config){
         var deferred = Ext.create('Deft.Deferred');
