@@ -118,7 +118,7 @@ body {
 .r4middle {
     display: table-cell;
     vertical-align: middle;
-    text-align: center;
+    text-align: left;
 }
 .header {
     border: 1px;

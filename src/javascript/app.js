@@ -21,6 +21,7 @@ Ext.define("print-feature-cards", {
     
     _gatherData: function(){
         var feature_fields = Rally.technicalservices.CardConfiguration.fetchFields;
+        this.setLoading("Gathering data...");
         
         Deft.Chain.sequence([
             this._loadFeatures,
@@ -30,6 +31,7 @@ Ext.define("print-feature-cards", {
             scope: this,
             success: function(results) {
                 this._openPrintCards(results[0]);
+                this.setLoading(false);
             },
             failure: function(msg) {
                 Ext.Msg.alert("Problem printing cards", msg);

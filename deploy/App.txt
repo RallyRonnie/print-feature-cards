@@ -3,11 +3,11 @@
 <head>
     <title>Print Feature Cards</title>
     <!--  (c) 2015 Rally Software Development Corp.  All Rights Reserved. -->
-    <!--  Build Date: Tue Dec 29 2015 17:07:21 GMT-0800 (PST) -->
+    <!--  Build Date: Tue Dec 29 2015 17:16:07 GMT-0800 (PST) -->
     
     <script type="text/javascript">
-        var APP_BUILD_DATE = "Tue Dec 29 2015 17:07:21 GMT-0800 (PST)";
-        var CHECKSUM = 13618631505;
+        var APP_BUILD_DATE = "Tue Dec 29 2015 17:16:07 GMT-0800 (PST)";
+        var CHECKSUM = 14023808890;
     </script>
     
     <script type="text/javascript" src="/apps/2.0/sdk.js"></script>
@@ -404,6 +404,7 @@ Ext.define("print-feature-cards", {
     
     _gatherData: function(){
         var feature_fields = Rally.technicalservices.CardConfiguration.fetchFields;
+        this.setLoading("Gathering data...");
         
         Deft.Chain.sequence([
             this._loadFeatures,
@@ -413,6 +414,7 @@ Ext.define("print-feature-cards", {
             scope: this,
             success: function(results) {
                 this._openPrintCards(results[0]);
+                this.setLoading(false);
             },
             failure: function(msg) {
                 Ext.Msg.alert("Problem printing cards", msg);
@@ -624,7 +626,7 @@ Ext.define('Rally.technicalservices.CardConfiguration',{
             dataIndex: function(record){
                 return record.get('FormattedID') + ': ' +record.get('Name');
             },
-            maxLength: 30
+            maxLength: 34
         },
         r1right: {
             dataIndex: function(recordData){     
@@ -659,8 +661,16 @@ Ext.define('Rally.technicalservices.CardConfiguration',{
             }
         },
         r3middle: {
-            dataIndex: 'Description',
-            maxLength: 200
+            dataIndex: function(recordData) {
+                var description = recordData.get('Description');
+                
+                if ( Ext.isEmpty(description) ) {
+                    return "--";
+                }
+                
+                return description.replace(/<(?:.|\n)*?>/gm, '');
+            },
+            maxLength: 155
         },
         r4middle: {
             dataIndex: function(recordData) {
@@ -675,7 +685,13 @@ Ext.define('Rally.technicalservices.CardConfiguration',{
                     team_list = Ext.Array.map(stories, function(story) { return story.get("Project").Name; });
                     team_list = Ext.Array.unique(team_list);
                     
-                    asset_list = Ext.Array.map(stories, function(story) { return story.get('c_System'); });
+                    asset_list = [];
+                    Ext.Array.each(stories, function(story) { 
+                        var system = story.get('c_System');
+                        if ( !Ext.isEmpty(system) ) {
+                            asset_list.push(system); 
+                        }
+                    });
                     asset_list = Ext.Array.unique(asset_list);
                 }
                 
@@ -819,7 +835,7 @@ body {
 .r4middle {
     display: table-cell;
     vertical-align: middle;
-    text-align: center;
+    text-align: left;
 }
 .header {
     border: 1px;

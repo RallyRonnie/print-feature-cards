@@ -3,10 +3,10 @@
 <head>
     <title>Print Feature Cards</title>
     <!--  (c) 2015 Rally Software Development Corp.  All Rights Reserved. -->
-    <!--  Build Date: Tue Dec 29 2015 17:07:21 GMT-0800 (PST) -->
+    <!--  Build Date: Tue Dec 29 2015 17:16:07 GMT-0800 (PST) -->
     
     <script type="text/javascript">
-        var APP_BUILD_DATE = "Tue Dec 29 2015 17:07:21 GMT-0800 (PST)";
+        var APP_BUILD_DATE = "Tue Dec 29 2015 17:16:07 GMT-0800 (PST)";
         var CHECKSUM = [%= checksum %];
     </script>
     
@@ -144,7 +144,7 @@ body {
 .r4middle {
     display: table-cell;
     vertical-align: middle;
-    text-align: center;
+    text-align: left;
 }
 .header {
     border: 1px;
