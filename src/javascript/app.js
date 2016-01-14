@@ -2,21 +2,40 @@ Ext.define("print-feature-cards", {
     extend: 'Rally.app.App',
     componentCls: 'app',
     logger: new Rally.technicalservices.Logger(),
-    defaults: { margin: 10 },
+    defaults: { margin: 5 },
     items: [
-        {xtype:'container',itemId:'message_box',tpl:'Hello, <tpl>{_refObjectName}</tpl>'},
         {xtype:'container',itemId:'display_box'}
     ],
 
     features: [],
     
     launch: function() {
-        this.down('#display_box').add({
+        var container = this.down('#display_box');
+        
+        this.filterButton = container.add({
+            xtype: 'rallycustomfilterbutton',
+            modelNames: ['PortfolioItem/Feature'],
+            context: this.context,
+            listeners: {
+                customfilter: {
+                    fn: this._setFilter,
+                    single: false,
+                    scope: this
+                }
+            }
+        });
+        
+        container.add({
             xtype: 'rallybutton',
             text: 'Open Print Cards',
             scope: this,
+            margin: 3,
             handler: this._gatherData
         });
+    },
+    
+    _setFilter: function() {
+        this.filters = this.filterButton.getFilters();
     },
     
     _gatherData: function(){
@@ -47,6 +66,10 @@ Ext.define("print-feature-cards", {
             model: 'PortfolioItem/Feature',
             fetch: Rally.technicalservices.CardConfiguration.fetchFields
         };
+        
+        if ( this.filters ) {
+            config.filters = this.filters;
+        }
         
         this._loadWsapiRecords(config).then({
             scope: this,
