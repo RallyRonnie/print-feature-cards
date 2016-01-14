@@ -202,6 +202,7 @@ Ext.define("print-feature-cards", {
             currentDocument: Ext.getDoc()
         });
         win.show();
+        win.print();
     },
     
     getOptions: function() {

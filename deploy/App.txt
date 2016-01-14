@@ -3,11 +3,11 @@
 <head>
     <title>Print Feature Cards</title>
     <!--  (c) 2015 Rally Software Development Corp.  All Rights Reserved. -->
-    <!--  Build Date: Tue Dec 29 2015 17:16:07 GMT-0800 (PST) -->
+    <!--  Build Date: Thu Jan 14 2016 10:27:35 GMT-0800 (PST) -->
     
     <script type="text/javascript">
-        var APP_BUILD_DATE = "Tue Dec 29 2015 17:16:07 GMT-0800 (PST)";
-        var CHECKSUM = 14023808890;
+        var APP_BUILD_DATE = "Thu Jan 14 2016 10:27:35 GMT-0800 (PST)";
+        var CHECKSUM = 14232963222;
     </script>
     
     <script type="text/javascript" src="/apps/2.0/sdk.js"></script>
@@ -329,18 +329,27 @@ Ext.define('Rally.technicalservices.window.PrintCards',{
     },
     show: function(){
         var options = "toolbar=1,menubar=1,scrollbars=yes,scrolling=yes,resizable=yes,width=1000,height=500";
-        var win = window.open('',this.title);
+        this.win = window.open('',this.title);
 
         var html = this._buildCardsHTML();
 
-        win.document.write('<html><head><title>' + this.title + '</title>');
-        win.document.write('<style>');
-        win.document.write(this._getStyleSheet(this.styleSheetTitle));
-        win.document.write('</style>');
-        win.document.write('</head><body class="landscape">');
-        win.document.write(html);
-        win.document.write('</body></html>');
+        this.win.document.write('<html><head><title>' + this.title + '</title>');
+        this.win.document.write('<style>');
+        this.win.document.write(this._getStyleSheet(this.styleSheetTitle));
+        this.win.document.write('</style>');
+        this.win.document.write('</head><body class="landscape">');
+        this.win.document.write(html);
+        this.win.document.write('</body></html>');
     },
+    
+    print: function() {
+        if ( !this.win ) {
+            this.show();
+        }
+        this.win.print();
+        this.win.close();
+    },
+    
     _buildCardsHTML: function() {
 
         var html = '';
@@ -585,6 +594,7 @@ Ext.define("print-feature-cards", {
             currentDocument: Ext.getDoc()
         });
         win.show();
+        win.print();
     },
     
     getOptions: function() {
@@ -674,7 +684,7 @@ Ext.define('Rally.technicalservices.CardConfiguration',{
         },
         r4middle: {
             dataIndex: function(recordData) {
-                var template = "ASSETS: ({0}) {1}<br/>" +
+                var template = "SYSTEMS: ({0}) {1}<br/>" +
                                "TEAMS : ({2}) {3}"
                 
                 var asset_list = [];

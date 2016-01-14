@@ -58,7 +58,7 @@ Ext.define('Rally.technicalservices.CardConfiguration',{
         },
         r4middle: {
             dataIndex: function(recordData) {
-                var template = "ASSETS: ({0}) {1}<br/>" +
+                var template = "SYSTEMS: ({0}) {1}<br/>" +
                                "TEAMS : ({2}) {3}"
                 
                 var asset_list = [];

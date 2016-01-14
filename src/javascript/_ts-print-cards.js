@@ -20,18 +20,27 @@ Ext.define('Rally.technicalservices.window.PrintCards',{
     },
     show: function(){
         var options = "toolbar=1,menubar=1,scrollbars=yes,scrolling=yes,resizable=yes,width=1000,height=500";
-        var win = window.open('',this.title);
+        this.win = window.open('',this.title);
 
         var html = this._buildCardsHTML();
 
-        win.document.write('<html><head><title>' + this.title + '</title>');
-        win.document.write('<style>');
-        win.document.write(this._getStyleSheet(this.styleSheetTitle));
-        win.document.write('</style>');
-        win.document.write('</head><body class="landscape">');
-        win.document.write(html);
-        win.document.write('</body></html>');
+        this.win.document.write('<html><head><title>' + this.title + '</title>');
+        this.win.document.write('<style>');
+        this.win.document.write(this._getStyleSheet(this.styleSheetTitle));
+        this.win.document.write('</style>');
+        this.win.document.write('</head><body class="landscape">');
+        this.win.document.write(html);
+        this.win.document.write('</body></html>');
     },
+    
+    print: function() {
+        if ( !this.win ) {
+            this.show();
+        }
+        this.win.print();
+        this.win.close();
+    },
+    
     _buildCardsHTML: function() {
 
         var html = '';
