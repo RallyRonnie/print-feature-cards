@@ -41,14 +41,14 @@ body {
     margin: 0.1in 0.1in 0.1in 0.1in;
     position: relative;
     overflow: hidden;
-    width: 4.3in;
+    width: 3.7in;
 }
 .r1 {
     border: 1px;
     border-bottom-style: solid;
     height: 40px;
     font-family: NotoSans, Helvetica, Arial;
-    font-size: 12pt;
+    font-size: 11pt;
     background-color: #6699cc;
     color: #FFFFFF;
 }
@@ -58,6 +58,7 @@ body {
     width: 2.8in;
     height: 40px;
     padding-left: 0.5em;
+    overflow: hidden;
     border-right: 1px solid #000;
 }
 .r1right {
@@ -174,6 +175,6 @@ body {
 .content {
     height: 2.4in;
     overflow: hidden;
-    width: 4.3in;
+    width: 3.7in;
 }
 </style>

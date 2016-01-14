@@ -7,6 +7,10 @@ Formatting
 
 ## Development Notes
 
+* The css has to be read into the html so that it can be used on the popped-up print page.  This can
+be reviewed in external mode, but you do have to re-grunt every time you change the css because it is
+copied right into the template even in the external version.
+
 ### First Load
 
 If you've just downloaded this from github and you want to do development, 
