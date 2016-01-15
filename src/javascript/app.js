@@ -34,8 +34,12 @@ Ext.define("print-feature-cards", {
         });
     },
     
-    _setFilter: function() {
-        this.filters = this.filterButton.getFilters();
+    _setFilter: function(button) {
+        if ( this.filterButton) {
+            this.filters = this.filterButton.getFilters();
+        } else {
+            this.filters = button.getFilters();
+        }
     },
     
     _gatherData: function(){

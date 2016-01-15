@@ -3,11 +3,11 @@
 <head>
     <title>Print Feature Cards</title>
     <!--  (c) 2015 Rally Software Development Corp.  All Rights Reserved. -->
-    <!--  Build Date: Thu Jan 14 2016 11:50:31 GMT-0800 (PST) -->
+    <!--  Build Date: Fri Jan 15 2016 08:57:09 GMT-0800 (PST) -->
     
     <script type="text/javascript">
-        var APP_BUILD_DATE = "Thu Jan 14 2016 11:50:31 GMT-0800 (PST)";
-        var CHECKSUM = 14697359036;
+        var APP_BUILD_DATE = "Fri Jan 15 2016 08:57:09 GMT-0800 (PST)";
+        var CHECKSUM = 14813432638;
     </script>
     
     <script type="text/javascript" src="/apps/2.0/sdk.js"></script>
@@ -426,8 +426,12 @@ Ext.define("print-feature-cards", {
         });
     },
     
-    _setFilter: function() {
-        this.filters = this.filterButton.getFilters();
+    _setFilter: function(button) {
+        if ( this.filterButton) {
+            this.filters = this.filterButton.getFilters();
+        } else {
+            this.filters = button.getFilters();
+        }
     },
     
     _gatherData: function(){
