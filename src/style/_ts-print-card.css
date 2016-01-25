@@ -49,8 +49,7 @@ body {
     height: 40px;
     font-family: NotoSans, Helvetica, Arial;
     font-size: 11pt;
-    background-color: #6699cc;
-    color: #FFFFFF;
+    color: #000000;
 }
 .r1left {
     display: table-cell;
@@ -73,7 +72,6 @@ body {
     height: 40px;
     font-family: NotoSans, Helvetica, Arial;
     font-size: 10pt;
-    background-color: #d9e6f2;
 }
 .r2left {
     display: table-cell;

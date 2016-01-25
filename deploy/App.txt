@@ -3,11 +3,11 @@
 <head>
     <title>Print Feature Cards</title>
     <!--  (c) 2015 Rally Software Development Corp.  All Rights Reserved. -->
-    <!--  Build Date: Sun Jan 24 2016 16:52:39 GMT-0800 (PST) -->
+    <!--  Build Date: Sun Jan 24 2016 17:17:05 GMT-0800 (PST) -->
     
     <script type="text/javascript">
-        var APP_BUILD_DATE = "Sun Jan 24 2016 16:52:39 GMT-0800 (PST)";
-        var CHECKSUM = 15576307926;
+        var APP_BUILD_DATE = "Sun Jan 24 2016 17:17:05 GMT-0800 (PST)";
+        var CHECKSUM = 16525778430;
     </script>
     
     <script type="text/javascript" src="/apps/2.0/sdk.js"></script>
@@ -305,6 +305,28 @@ Ext.define('Rally.technicalservices.CardDisplayField',{
     maxLength: undefined,
     position: undefined,
     cls: undefined
+});
+
+Ext.override(Rally.ui.filter.plugin.CustomFilterRowController, {
+        _buildDataForOperator: function(records, field) {
+            console.log('_buildDataForOperator', records, field);
+            
+            var operatorNames = _.map(records, function(record){
+                return record.get('OperatorName');
+            });
+
+            var validOperatorNames = _.filter(operatorNames, function(operatorName){
+                return operatorName !== 'containsall' && operatorName !== 'containsany';
+            });
+
+            return _.map(validOperatorNames, function(operatorName) {
+                return {
+                    name: operatorName,
+                    displayName: field.isCollection() ? operatorName.replace('contains', '=') : operatorName
+                };
+            }).concat(this.view.additionalOperators || []);
+        }
+
 });
 
 Ext.override(Rally.ui.filter.CustomFilterPanel, {
@@ -842,8 +864,7 @@ body {
     height: 40px;
     font-family: NotoSans, Helvetica, Arial;
     font-size: 11pt;
-    background-color: #6699cc;
-    color: #FFFFFF;
+    color: #000000;
 }
 .r1left {
     display: table-cell;
@@ -866,7 +887,6 @@ body {
     height: 40px;
     font-family: NotoSans, Helvetica, Arial;
     font-size: 10pt;
-    background-color: #d9e6f2;
 }
 .r2left {
     display: table-cell;

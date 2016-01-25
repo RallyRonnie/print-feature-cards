@@ -1,3 +1,25 @@
+Ext.override(Rally.ui.filter.plugin.CustomFilterRowController, {
+        _buildDataForOperator: function(records, field) {
+            console.log('_buildDataForOperator', records, field);
+            
+            var operatorNames = _.map(records, function(record){
+                return record.get('OperatorName');
+            });
+
+            var validOperatorNames = _.filter(operatorNames, function(operatorName){
+                return operatorName !== 'containsall' && operatorName !== 'containsany';
+            });
+
+            return _.map(validOperatorNames, function(operatorName) {
+                return {
+                    name: operatorName,
+                    displayName: field.isCollection() ? operatorName.replace('contains', '=') : operatorName
+                };
+            }).concat(this.view.additionalOperators || []);
+        }
+
+});
+
 Ext.override(Rally.ui.filter.CustomFilterPanel, {
     _getItems: function() {
         console.log(this.boxWidths);
