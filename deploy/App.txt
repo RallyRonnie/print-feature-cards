@@ -3,11 +3,11 @@
 <head>
     <title>Print Feature Cards</title>
     <!--  (c) 2015 Rally Software Development Corp.  All Rights Reserved. -->
-    <!--  Build Date: Mon Jan 25 2016 11:09:18 GMT-0800 (PST) -->
+    <!--  Build Date: Mon Jan 25 2016 11:15:07 GMT-0800 (PST) -->
     
     <script type="text/javascript">
-        var APP_BUILD_DATE = "Mon Jan 25 2016 11:09:18 GMT-0800 (PST)";
-        var CHECKSUM = 16525757855;
+        var APP_BUILD_DATE = "Mon Jan 25 2016 11:15:07 GMT-0800 (PST)";
+        var CHECKSUM = 16584110481;
     </script>
     
     <script type="text/javascript" src="/apps/2.0/sdk.js"></script>
@@ -916,11 +916,12 @@ body {
     height: 120px;
     font-family: NotoSans, Helvetica, Arial;
     font-size: 12pt;
+    padding-left: 0.5em;
 }
 .r3middle {
     display: table-cell;
     vertical-align: middle;
-    text-align: center;
+    text-align: left;
 }
 .r4{
     border: 1px;
@@ -928,6 +929,7 @@ body {
     height: 120px;
     font-family: NotoSans, Helvetica, Arial;
     font-size: 12pt;
+    padding-left: 0.5em;
 }
 .r4middle {
     display: table-cell;

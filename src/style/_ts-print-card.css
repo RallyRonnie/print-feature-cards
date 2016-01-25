@@ -101,11 +101,12 @@ body {
     height: 120px;
     font-family: NotoSans, Helvetica, Arial;
     font-size: 12pt;
+    padding-left: 0.5em;
 }
 .r3middle {
     display: table-cell;
     vertical-align: middle;
-    text-align: center;
+    text-align: left;
 }
 .r4{
     border: 1px;
@@ -113,6 +114,7 @@ body {
     height: 120px;
     font-family: NotoSans, Helvetica, Arial;
     font-size: 12pt;
+    padding-left: 0.5em;
 }
 .r4middle {
     display: table-cell;
