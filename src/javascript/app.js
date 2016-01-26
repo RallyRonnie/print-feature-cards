@@ -4,7 +4,8 @@ Ext.define("print-feature-cards", {
     logger: new Rally.technicalservices.Logger(),
     defaults: { margin: 5 },
     items: [
-        {xtype:'container',itemId:'display_box'}
+        {xtype:'container',itemId:'display_box'},
+        {xtype:'container', itemId:'message_box', tpl: '<tpl>{message</tpl>' }
     ],
 
     features: [],
@@ -40,6 +41,12 @@ Ext.define("print-feature-cards", {
         } else {
             this.filters = button.getFilters();
         }
+        
+//        if ( this.filters && this.filters.length > 0 ) {
+//            console.log(this.filters);
+//            exit();
+//            // message_box
+//        }
     },
     
     _gatherData: function(){
@@ -104,6 +111,10 @@ Ext.define("print-feature-cards", {
         
         this.logger.log('milestones:', milestone_names);
         
+        if ( milestone_names.length === 0 ) {
+            return [];
+        }
+        
         var unique_names = Ext.Array.unique( Ext.Array.flatten(milestone_names) );
         
         var config = {
@@ -111,6 +122,7 @@ Ext.define("print-feature-cards", {
             fetch: ['Name','TargetDate']
         };
         
+        this.logger.log('--');
         if ( unique_names.length > 0 ) {
             var filter_array = Ext.Array.map(unique_names, function(name){
                 return { property:'Name', value: name };
@@ -148,6 +160,11 @@ Ext.define("print-feature-cards", {
     
     _loadStories: function() {
         var deferred = Ext.create('Deft.Deferred');
+        this.logger.log('_loadStories');
+        
+        if ( this.features.length === 0 ) {
+            return [];
+        }
         
         var feature_oids = Ext.Array.map(this.features, function(feature){
             return feature.get('ObjectID');
