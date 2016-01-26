@@ -10,7 +10,7 @@ Ext.define('Rally.technicalservices.CardConfiguration',{
             dataIndex: function(record){
                 return record.get('FormattedID') + ': ' +record.get('Name');
             },
-            maxLength: 34
+            maxLength: 125
         },
         r1right: {
             dataIndex: function(recordData){     
@@ -31,13 +31,13 @@ Ext.define('Rally.technicalservices.CardConfiguration',{
         },
         r2left: {
             dataIndex: function(recordData) { return recordData.get('Project').Name; },
-            maxLength: 20
+            maxLength: 40
         },
         r2middle: {
             dataIndex: function(recordData){
                 return recordData.get('Owner') && recordData.get('Owner')._refObjectName || "None";
             },
-            maxLength: 20
+            maxLength: 30
         },
         r2right: {
             dataIndex: function(recordData) {
@@ -54,7 +54,7 @@ Ext.define('Rally.technicalservices.CardConfiguration',{
                 
                 return description.replace(/<(?:.|\n)*?>/gm, '');
             },
-            maxLength: 155
+            maxLength: 325
         },
         r4middle: {
             dataIndex: function(recordData) {

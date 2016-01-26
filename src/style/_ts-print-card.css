@@ -37,16 +37,16 @@ body {
     background-color: #fff;
     border: 2px solid #000;
     float: left;
-    height: 3.1in;
+    height: 3.7in;
     margin: 0.1in 0.1in 0.1in 0.1in;
     position: relative;
     overflow: hidden;
-    width: 3.7in;
+    width: 4.9in;
 }
 .r1 {
     border: 1px;
     border-bottom-style: solid;
-    height: 40px;
+    height: 60px;
     font-family: NotoSans, Helvetica, Arial;
     font-size: 11pt;
     color: #000000;
@@ -54,16 +54,15 @@ body {
 .r1left {
     display: table-cell;
     padding-top: 0.5em;
-    width: 2.8in;
-    height: 40px;
+    width: 3.6in;
     padding-left: 0.5em;
     overflow: hidden;
     border-right: 1px solid #000;
+    height: 60px;
 }
 .r1right {
     display: table-cell;
     padding-top: 0.5em;
-    width: 1.5in;
     padding-left: 0.5em;
 }
 .r2{
@@ -75,17 +74,16 @@ body {
 }
 .r2left {
     display: table-cell;
-    width: 1.3in;
+    width: 1.7in;
     padding-top: 0.5em;
     padding-left: 0.5em;
-    height: 40px;
     border-right: 1px solid #000;
+    height: 40px;
 }
 .r2middle {
     display: table-cell;
-    width: 1.4in;
+    width: 1.5in;
     padding-top: 0.5em;
-    height: 40px;
     padding-left: 0.5em;
     border-right: 1px solid #000;
 }
@@ -93,18 +91,18 @@ body {
     display: table-cell;
     padding-top: 0.5em;
     padding-left: 0.5em;
-    width: 1.5in;
 }
 .r3{
     border: 1px;
     border-bottom-style: solid;
-    height: 120px;
+    height: 140px;
     font-family: NotoSans, Helvetica, Arial;
     font-size: 12pt;
     padding-left: 0.5em;
+    padding-right: 0.5em;
 }
 .r3middle {
-    display: table-cell;
+    display: block;
     vertical-align: middle;
     text-align: left;
 }

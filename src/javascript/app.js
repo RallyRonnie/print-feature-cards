@@ -233,7 +233,7 @@ Ext.define("print-feature-cards", {
         
         var fields =[{
             dataIndex: 'Name',
-            maxLength: 100,
+            maxLength: 200,
             cls: 'card-title'
         },{
             dataIndex: 'FormattedID',

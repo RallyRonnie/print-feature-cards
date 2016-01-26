@@ -43,8 +43,9 @@ Ext.define('Rally.technicalservices.CardTemplate',{
                         } else {
                             val = recordData.get(displayField.dataIndex) || "&nbsp;";
                         }
+                        
                         if (displayField.maxLength > 0){
-                            val = Ext.String.ellipsis(val, displayField.maxLength);
+                            val = Ext.String.ellipsis(val, displayField.maxLength, false);
                         }
                     }
                     //console.log('getContent', recordData, displayField, val);
