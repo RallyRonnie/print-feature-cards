@@ -25,6 +25,14 @@ Ext.define("print-feature-cards", {
                 }
             }
         });
+       
+        this.queryButton = container.add({
+            xtype:'tsquerybutton',
+            listeners: {
+                scope: this,
+                querychanged: this._setFilter
+            }
+        });
         
         container.add({
             xtype: 'rallybutton',
@@ -38,15 +46,16 @@ Ext.define("print-feature-cards", {
     _setFilter: function(button) {
         if ( this.filterButton) {
             this.filters = this.filterButton.getFilters();
-        } else {
-            this.filters = button.getFilters();
         }
         
-//        if ( this.filters && this.filters.length > 0 ) {
-//            console.log(this.filters);
-//            exit();
-//            // message_box
-//        }
+        if ( this.queryButton && !Ext.isEmpty(this.queryButton.getQuery()) ) {
+            this.filterButton && this.filterButton.setDisabled(true);
+            this.filters = Rally.data.wsapi.Filter.fromQueryString(this.queryButton.getQuery());
+        }
+        
+        if ( this.queryButton && Ext.isEmpty(this.queryButton.getQuery()) ) {
+            this.filterButton && this.filterButton.setDisabled(false);
+        }
     },
     
     _gatherData: function(){
@@ -65,6 +74,7 @@ Ext.define("print-feature-cards", {
             },
             failure: function(msg) {
                 Ext.Msg.alert("Problem printing cards", msg);
+                this.setLoading(false);
             }
         });
 
