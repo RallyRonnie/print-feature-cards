@@ -5,6 +5,11 @@ MaxLength
 Region
 Formatting
 
+* There are two filters on the page -- one that uses dropdowns for fields, operator and values and another that lets you build a query by hand.  If you use the 
+manual one (with the Q), then it disables the other filter button and uses only the manual one.  You can get rid of the manual one by clicking the button and putting an empty query in (then the filter button takes over again).
+** There is not a syntax checker, it'll provide the failure message that comes back from the server
+
+
 ## Development Notes
 
 * The css has to be read into the html so that it can be used on the popped-up print page.  This can
